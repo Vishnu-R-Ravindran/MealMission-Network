@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Professional Admin Dashboard</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* General Styles */
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #4b5e6b, #f1f8e9);
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Sidebar Styling */
+    .sidebar {
+      height: 100vh;
+      width: 280px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background: linear-gradient(135deg, #758993, #2575fc);
+      box-shadow: 5px 0 15px rgba(0, 0, 0, 0.3);
+      padding-top: 30px;
+    }
+
+    .sidebar h4 {
+      color: #fff;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .sidebar a {
+      color: #f1f1f1;
+      text-decoration: none;
+      padding: 15px 20px;
+      display: block;
+      border-radius: 8px;
+      margin: 10px 20px;
+      transition: all 0.3s ease;
+    }
+
+    .sidebar a:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.05);
+    }
+
+    /* Content Area Styling */
+    .content {
+      margin-left: 280px;
+      padding: 30px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .card {
+      border: none;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-10px);
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: bold;
+    }
+
+    .btn {
+      border-radius: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      transform: scale(1.1);
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h4>Admin Dashboard</h4>
+    <a href="/adm/"><i class="material-icons">dashboard</i> Dashboard</a>
+<a href="/list/"><i class="material-icons">home</i> Orphanages</a>
+<a href="/list2/"><i class="material-icons">hotel</i> Hotels</a>
+<a href="/list_1/"><i class="material-icons">people</i> Coordinators</a>
+<a href="/listx/"><i class="material-icons">favorite</i>Donations</a>
+<a href="/f_list/"><i class="material-icons">feedback</i> Feedbacks</a>
+<a href="/logout/"><i class="material-icons">logout</i> Logout</a>
+
+  </div>
+
+  <!-- Main Content -->
+  <div class="content">
+    <h1>Welcome, Admin</h1>
+    <div class="row mt-4">
+      <!-- Card 1 -->
+      <div class="col-md-4">
+        <div class="card text-center text-white bg-primary">
+          <div class="card-body">
+            <h5 class="card-title">orphanages</h5>
+            <p class="card-text">Manage and view all orphanages in the system.</p>
+            <a href="/list/" class="btn btn-light">View orphanages</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="col-md-4">
+        <div class="card text-center text-white bg-success">
+          <div class="card-body">
+            <h5 class="card-title">Coordinators</h5>
+            <p class="card-text">Track and manage Coordinators  effectively.</p>
+            <a href="/list_1/" class="btn btn-light">View Coordinators</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="col-md-4">
+        <div class="card text-center text-white bg-danger">
+          <div class="card-body">
+            <h5 class="card-title">Reports</h5>
+            <p class="card-text">Analyze system performance and data.</p>
+            <a href="/donation-status-chart/" class="btn btn-light">View Reports</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Second Row -->
+    <div class="row mt-4">
+      <div class="col-md-6">
+        <div class="card text-center text-white bg-warning">
+          <div class="card-body">
+            <h5 class="card-title">Donations</h5>
+            <p class="card-text">Track and manage donations effectively.</p>
+            <a href="/adhome/" class="btn btn-light">View Donations</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card text-center text-white bg-info">
+          <div class="card-body">
+            <h5 class="card-title">Logout</h5>
+            <p class="card-text">Securely log out from the admin panel.</p>
+            <a href="/logout/" class="btn btn-light">Logout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

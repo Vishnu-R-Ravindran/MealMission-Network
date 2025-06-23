@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coordinator's Donations</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #FFB6C1, #ADD8E6, #D3D3D3); /* Light pastel gradient */
+            background-size: cover;
+            font-family: 'Arial', sans-serif;
+            color: #333;
+            padding: 0;
+            margin: 0;
+        }
+
+        /* Parallax Background */
+        .parallax {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: url('https://your-image-link.com') no-repeat center center fixed;
+            background-size: cover;
+            z-index: -1;
+            transform: scale(1.1);
+            transition: transform 0.3s ease-out;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            padding: 100px 30px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 50px;
+            text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.4);
+            color: #333;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .btn {
+            background-color: #f5a623;
+            color: #fff;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 50px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #fff;
+            color: #f5a623;
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .donation-card-footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .badge {
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 30px;
+        }
+
+        /* Hover Effects on Table Rows */
+        tr:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: scale(1.05);
+            transition: all 0.3s ease;
+        }
+
+        /* Card Header */
+        .card-header {
+            background-color: rgba(0, 0, 0, 0.2);
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 1.25rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Parallax Background -->
+    <div class="parallax"></div>
+
+    <div class="container">
+        <h1>Your Collected and Received Donations</h1>
+
+        <!-- Loop through the donations and display each as a card -->
+        <div class="row">
+            {% for donation in donations %}
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            Donation Details
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ donation.food_details }} - {{ donation.quantity }} meals</h5>
+                            <p class="card-text">
+                                <strong>Pickup Time:</strong> {{ donation.proposed_pickup_time }}<br>
+                                <strong>Pickup Location:</strong> {{ donation.proposed_location }}<br>
+                                <strong>Received From:</strong> {{ donation.hotel.name }}
+                            </p>
+                            <p class="card-text">
+                                <strong>Status:</strong> 
+                                {% if donation.status == "COLLECTED" %}
+                                    <span class="badge badge-success" style="background-color: #5cb85c; color: white;">Collected</span>
+                                {% else %}
+                                    <span class="badge badge-success" style="background-color: #dad019; color: white;">Received</span>
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

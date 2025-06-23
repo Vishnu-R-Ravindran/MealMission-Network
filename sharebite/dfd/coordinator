@@ -1,0 +1,47 @@
+digraph Coordinator_Module {
+    /* Graph settings */
+    rankdir=TB;
+    node [fontsize=10];
+    
+    /* Title of the diagram */
+    labelloc="t";
+    label="Coordinator Module Data Flow Diagram";
+    
+    /* External Entity */
+    Coordinator [shape=box, label="Coordinator"];
+    
+    /* Processes */
+    Register [shape=circle, label="Register"];
+    Login [shape=circle, label="Login"];
+    ViewDonations [shape=circle, label="View\nAssigned Donations"];
+    UpdateStatus [shape=circle, label="Update\nDonation Status"];
+    ManageProfile [shape=circle, label="Manage\nProfile"];
+    DashboardAccess [shape=circle, label="Access\nDashboard"];
+    
+    /* Data Stores */
+    CoordinatorDB [shape=record, label="|{ Coordinator }"];
+    DonationDB [shape=record, label="|{ Donation }"];
+    
+    /* Coordinator to Register Connection */
+    Coordinator -> Register [label="Details"];
+    Register -> CoordinatorDB [label="Store Details"];
+    
+    /* Coordinator to Login Connection */
+    Coordinator -> Login [label="Credentials"];
+    
+    /* Login to Process Connections */
+    Login -> ViewDonations [label="Access"];
+    Login -> UpdateStatus [label="Access"];
+    Login -> ManageProfile [label="Access"];
+    Login -> DashboardAccess [label="Access"];
+    
+    /* Process to DataStore Connections */
+    ViewDonations -> DonationDB [dir=both, label="Fetch Assigned\nDonations"];
+    UpdateStatus -> DonationDB [dir=both, label="Update Donation\nStatus"];
+    ManageProfile -> CoordinatorDB [dir=both, label="Update Profile\nData"];
+    DashboardAccess -> DonationDB [label="Fetch Metrics"];
+    
+    /* Graph Layout */
+    {rank=same; Register Login ViewDonations UpdateStatus ManageProfile DashboardAccess}
+    {rank=same; CoordinatorDB DonationDB}
+}

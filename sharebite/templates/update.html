@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+        }
+        fieldset {
+            border: none;
+            margin: 0;
+            padding: 0;
+        }
+        legend {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 5px;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input[type="text"], input[type="email"], input[type="tel"], input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        input[type="file"] {
+            border: none;
+            margin-top: 5px;
+        }
+        input[type="radio"] {
+            margin-right: 5px;
+        }
+        .radio-group label {
+            display: inline-block;
+            margin-right: 15px;
+        }
+        button {
+          background-color: #28a745; /* Changed from blue to green */
+          color: #fff;
+          border: none;
+          padding: 10px 20px;
+          border-radius: 4px;
+          cursor: pointer;
+          font-size: 1em;
+      }
+
+      button:hover {
+          background-color: #218838; /* Darker green for hover effect */
+      }
+    </style>
+</head>
+<body>
+    <form method="post" action="/update/">
+        {% csrf_token %}
+        
+        <fieldset>
+            <legend>Profile</legend>
+        
+            <label for="name">Name</label>
+            <input type="text" id="name" name="txt" placeholder="Name" value="{{name}}" required>
+        
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="Email" value="{{email}}" required>
+        
+            <label for="image">Image</label>
+            <input type="file" id="image" name="img" required>
+        
+            <fieldset class="radio-group">
+                <legend>Gender</legend>
+                <label>
+                    <input type="radio" name="gender" value="MALE" {% if gender == "MALE" %}checked{% endif %} required> MALE
+                </label>
+                <label>
+                    <input type="radio" name="gender" value="FEMALE" {% if gender == "FEMALE" %}checked{% endif %} required> FEMALE
+                </label>
+            </fieldset>
+        
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" placeholder="Phone number" value="{{phone}}" required>
+        
+            <label for="age">Age</label>
+            <input type="number" id="age" name="ag" placeholder="Age" value="{{ag}}" required>
+        
+            <button type="submit">Submit</button>
+            <a href="/home/">back to home</a>
+        </fieldset>
+    </form>
+</body>
+</html>

@@ -1,0 +1,43 @@
+digraph Orphanage_Module {
+    /* Graph settings */
+    rankdir=TB;
+    node [fontsize=10];
+    
+    /* Title of the diagram */
+    labelloc="t";
+    label="Orphanage Module Data Flow Diagram lvl 3";
+    
+    /* External Entity */
+    Orphanage [shape=box, label="Orphanage"];
+    
+    /* Processes */
+    ViewDonations [shape=circle, label="View\nDonation\nDetails"];
+    RequestDonation [shape=circle, label="Request\nDonation"];
+    ProvideFeedback [shape=circle, label="Provide\nFeedback"];
+    UpdateCapacity [shape=circle, label="Update\nCapacity &\nOccupancy"];
+    
+    /* Data Stores */
+    OrphanageDB [shape=record, label="|Orphanage"];
+    DonationDB [shape=record, label="|Donation"];
+    FeedbackDB [shape=record, label="|Feedback"];
+    
+    /* Orphanage to Process Connections */
+    Orphanage -> ViewDonations [label="View\nAvailable Donations"];
+    Orphanage -> RequestDonation [label="Submit\nDonation Request"];
+    Orphanage -> ProvideFeedback [label="Submit\nFeedback"];
+    Orphanage -> UpdateCapacity [label="Update\nDetails"];
+    
+    /* Process to DataStore Connections */
+    ViewDonations -> DonationDB [dir=both, label="Access\nDonation Data"];
+    RequestDonation -> DonationDB [dir=both, label="Submit Request/\nCheck Status"];
+    ProvideFeedback -> FeedbackDB [dir=both, label="Submit/View\nFeedback"];
+    UpdateCapacity -> OrphanageDB [dir=both, label="Update\nOrphanage Info"];
+    
+    /* Cross-Process Connections */
+    ViewDonations -> OrphanageDB [dir=both, label="Verify\nOrphanage"];
+    RequestDonation -> OrphanageDB [dir=both, label="Verify\nEligibility"];
+    
+    /* Graph Layout */
+    {rank=same; ViewDonations RequestDonation ProvideFeedback UpdateCapacity}
+    {rank=same; OrphanageDB DonationDB FeedbackDB}
+}

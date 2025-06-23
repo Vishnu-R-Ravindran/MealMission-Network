@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Signup</title>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="wrapper">
+        <div class="tab-controls">
+            <button class="tab-btn active" data-target="login">Login</button>
+            <button class="tab-btn" data-target="signup">Signup</button>
+        </div>
+        
+        <div class="form-container">
+            <!-- Login Form -->
+            <form action="/coordinatorlogin/" class="form login active" method="post">
+                {% csrf_token %}
+                {% if msg %}
+                    <div class="message">{{ msg }}</div>
+                {% endif %}
+                <div class="field">
+                    <input type="email" name="email" placeholder="Email Address" required>
+                </div>
+                <div class="field password-field">
+                    <input type="password" name="password" placeholder="Password" required>
+                    <span class="toggle-password">👁️</span>
+                </div>
+                <div class="pass-link"><a href="/coordinator-forgot-password/">Forgot password?</a></div>
+                <div class="field">
+                    <button type="submit" class="submit-btn">Login</button>
+                </div>
+                <div class="switch-link">Not a member? <a href="#" data-target="signup">Signup now</a></div>
+            </form>
+
+            <!-- Signup Form -->
+            <form method="post" enctype="multipart/form-data" action="{% url 'coordinatoreg' %}" class="form signup">
+                {% csrf_token %}
+                <div class="field">
+                    <input type="text" name="txt" placeholder="Username" required>
+                </div>
+                <div class="field">
+                    <input type="email" name="email" placeholder="Email" required>
+                </div>
+                <div class="field">
+                    <input type="tel" 
+                           name="phone" 
+                           pattern="[0-9]{10}" 
+                           maxlength="10" 
+                           minlength="10"
+                           placeholder="Phone Number" 
+                           required
+                           oninvalid="this.setCustomValidity('Please enter a 10-digit phone number')"
+                           oninput="this.setCustomValidity('')">
+                </div>
+                <div class="field password-field">
+                    <input type="password" 
+                           name="pswd" 
+                           placeholder="Password" 
+                           pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$"
+                           required
+                           oninvalid="this.setCustomValidity('Password must be at least 8 characters with letters, numbers, and special characters')"
+                           oninput="this.setCustomValidity('')">
+                    <span class="toggle-password">👁️</span>
+                </div>
+                <div class="field gender-field">
+                    <label>Gender:</label>
+                    <div class="gender-options">
+                        <label><input type="radio" name="gender" value="MALE" required> Male</label>
+                        <label><input type="radio" name="gender" value="FEMALE"> Female</label>
+                    </div>
+                </div>
+                <div class="field">
+                    <input type="number" 
+                           name="ag" 
+                           placeholder="Age" 
+                           min="20" 
+                           max="70" 
+                           required
+                           oninvalid="this.setCustomValidity('Age must be between 20 and 70')"
+                           oninput="this.setCustomValidity('')">
+                </div>
+                <div class="field">
+                    <input type="file" name="img" accept="image/*" required>
+                </div>
+                <div class="field">
+                    <button type="submit" class="submit-btn">Sign Up</button>
+                </div>
+                <div class="switch-link">Already a member? <a href="#" data-target="login">Login</a></div>
+            </form>
+        </div>
+    </div>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #e0e8ff 0%, #f0f4ff 100%);
+            padding: 20px;
+        }
+
+        .wrapper {
+            background: #fff;
+            width: 100%;
+            max-width: 450px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .tab-controls {
+            display: flex;
+            border-bottom: 1px solid #eee;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 15px;
+            background: none;
+            border: none;
+            font-size: 18px;
+            font-weight: 500;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(to right, #034c03, #59d909);
+            color: white;
+        }
+
+        .form-container {
+            padding: 30px;
+        }
+
+        .form {
+            display: none;
+        }
+
+        .form.active {
+            display: block;
+        }
+
+        .field {
+            margin: 15px 0;
+        }
+
+        .field input,
+        .field button {
+            width: 100%;
+            height: 48px;
+            padding: 0 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .field input:focus {
+            border-color: #047914;
+            box-shadow: 0 0 5px rgba(4, 121, 20, 0.2);
+        }
+
+        .field input::placeholder {
+            color: #aaa;
+        }
+
+        .password-field {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 18px;
+            user-select: none;
+        }
+
+        .toggle-password:hover {
+            opacity: 0.8;
+        }
+
+        .gender-field {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .gender-options {
+            display: flex;
+            gap: 20px;
+        }
+
+        .gender-options label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #666;
+        }
+
+        .submit-btn {
+            background: linear-gradient(to right, #034c03, #59d909);
+            border: none;
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(to right, #023902, #4cbf07);
+        }
+
+        .pass-link,
+        .switch-link {
+            text-align: center;
+            margin: 10px 0;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .pass-link a,
+        .switch-link a {
+            color: #047914;
+            text-decoration: none;
+        }
+
+        .pass-link a:hover,
+        .switch-link a:hover {
+            text-decoration: underline;
+        }
+
+        .message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 14px;
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabs = document.querySelectorAll('.tab-btn');
+            const forms = document.querySelectorAll('.form');
+            const switchLinks = document.querySelectorAll('.switch-link a');
+
+            function showForm(target) {
+                tabs.forEach(tab => tab.classList.remove('active'));
+                forms.forEach(form => form.classList.remove('active'));
+                
+                document.querySelector(`.tab-btn[data-target="${target}"]`).classList.add('active');
+                document.querySelector(`.form.${target}`).classList.add('active');
+            }
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    showForm(tab.dataset.target);
+                });
+            });
+
+            switchLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showForm(link.dataset.target);
+                });
+            });
+
+            // Password toggle functionality
+            document.querySelectorAll('.toggle-password').forEach(toggle => {
+                toggle.addEventListener('click', () => {
+                    const passwordField = toggle.previousElementSibling;
+                    const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordField.setAttribute('type', type);
+                    toggle.textContent = type === 'password' ? '👁️' : '👁️‍🗨️';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

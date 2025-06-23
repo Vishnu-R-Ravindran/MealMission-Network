@@ -1,0 +1,84 @@
+<!-- donation_status_chart.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donation Status Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Include Chart.js from CDN -->
+    <style>
+        /* General page styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f6; /* Light gray background for a clean look */
+            margin: 0;
+            padding: 0;
+            color: #333; /* Dark text for readability */
+        }
+
+        /* Styling for the chart container */
+        .chart-container {
+            width: 70%; /* Medium width */
+            margin: auto;
+            padding: 30px;
+            background-color: #ffffff; /* White background for the container */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for a modern feel */
+            border-radius: 8px; /* Rounded corners for a polished look */
+        }
+
+        /* Heading styling */
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            color: #2a3d45; /* Darker shade for the header */
+            margin-bottom: 20px;
+        }
+
+        /* Adjust the size of the chart */
+        #donationStatusChart {
+            width: 100% !important; /* Full width */
+            height: 400px !important; /* Medium height */
+        }
+    </style>
+</head>
+<body>
+    <div class="chart-container">
+        <h1>Donation Status Distribution</h1>
+
+        <canvas id="donationStatusChart"></canvas> <!-- Canvas element for Chart.js -->
+
+        <script>
+            // Get data passed from the Django view
+            const statuses = {{ statuses|safe }};
+            const counts = {{ counts|safe }};
+            
+            // Set up the data for the chart
+            const data = {
+                labels: statuses, // Labels will be donation statuses
+                datasets: [{
+                    label: 'Number of Donations',
+                    data: counts, // Data is the count of donations for each status
+                    backgroundColor: ['#FF5733', '#33FF57', '#33A1FF', '#FF33A1', '#F4C542'],
+                    borderColor: ['#C14F34', '#34A04C', '#1E81B5', '#C1379B', '#D1A23D'],
+                    borderWidth: 1
+                }]
+            };
+
+            // Create a pie chart using Chart.js
+            const ctx = document.getElementById('donationStatusChart').getContext('2d');
+            const donationStatusChart = new Chart(ctx, {
+                type: 'pie',
+                data: data,
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                    },
+                }
+            });
+        </script>
+    </div>
+</body>
+</html>

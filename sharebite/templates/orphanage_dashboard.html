@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collected Donations</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #4b5e6b, #f1f8e9);
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #ffffff;
+            font-size: 2rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px auto;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            font-size: 1rem;
+            color: #333;
+        }
+
+        th {
+            background: #4b5e6b;
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background: #f1f8e9;
+        }
+
+        tr:nth-child(odd) {
+            background: #ffffff;
+        }
+
+        tr:hover {
+            background: #dfe7db;
+            cursor: pointer;
+        }
+
+        a {
+            color: #ffffff;
+            text-decoration: none;
+            background: #4b5e6b;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        a:hover {
+            background: #3a4b55;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <h1>Collected Donations Assigned to You</h1>
+    <table>
+        <tr>
+            <th>Donation Details</th>
+            <th>Received From</th>
+            <th>Pickup Time</th>
+            <th>Action</th>
+        </tr>
+        {% for donation in donations %}
+        <tr>
+            <td>{{ donation.food_details }} - {{ donation.quantity }} meals</td>
+            <td>{{ donation.hotel.name }}</td>
+            <td>{{ donation.proposed_pickup_time }}</td>
+            <td>
+                <a href="{% url 'mark_as_received' donation.id %}">Mark as Received</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

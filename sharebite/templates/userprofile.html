@@ -1,0 +1,149 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 50%;
+            margin: auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 50px;
+        }
+        h2 {
+            color: #333;
+        }
+        .profile-header {
+            display: flex;
+            align-items: center;
+        }
+        .profile-image {
+            margin-right: 20px;
+        }
+        .profile-image img {
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+        }
+        .profile-details p, .edit-form label {
+            margin: 5px 0;
+            font-size: 16px;
+            color: #555;
+        }
+        .profile-details label {
+            font-weight: bold;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 20px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .edit-form {
+            display: none;  /* Initially hide the edit form */
+        }
+        input, select {
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+        }
+        .edit-btn {
+            background-color: #28a745;
+        }
+        .edit-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+    <script>
+        function toggleEdit() {
+            // Hide profile details and show the edit form
+            document.querySelector('.profile-details').style.display = 'none';
+            document.querySelector('.edit-form').style.display = 'block';
+        }
+
+        function toggleView() {
+            // Hide edit form and show the profile details
+            document.querySelector('.profile-details').style.display = 'block';
+            document.querySelector('.edit-form').style.display = 'none';
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="profile-header">
+            <div class="profile-image">
+                {% if user.image %}
+                    <img src="{{ user.image.url }}" alt="Profile Image">
+                {% else %}
+                    <img src="{% static 'default-profile.png' %}" alt="Default Profile Image">
+                {% endif %}
+            </div>
+            <div>
+                <h2>{{ user.name }}</h2>
+                <p>Email: {{ user.email }}</p>
+            </div>
+        </div>
+
+        <!-- Profile Details Section (View Mode) -->
+        <div class="profile-details">
+            <p><label>Phone Number:</label> {{ user.number }}</p>
+            <p><label>Gender:</label> {{ user.get_gender_display }}</p>
+            <p><label>Age:</label> {{ user.age }}</p>
+            <button class="btn" onclick="toggleEdit()">Edit Profile</button>
+        </div>
+
+        <!-- Edit Profile Section (Edit Mode) -->
+        <form method="POST" action='/update/' enctype="multipart/form-data" class="edit-form">
+            {% csrf_token %}
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" value="{{ user.name }}" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="{{ user.email }}" required>
+
+            <label for="number">Phone Number:</label>
+            <input type="text" id="number" name="number" value="{{ user.number }}" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" value="{{ user.password }}" required>
+
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender">
+                <option value="MALE" {% if user.gender == "MALE" %}selected{% endif %}>Male</option>
+                <option value="FEMALE" {% if user.gender == "FEMALE" %}selected{% endif %}>Female</option>
+            </select>
+
+            <label for="age">Age:</label>
+            <input type="number" id="age" name="age" value="{{ user.age }}" required>
+
+            <label for="image">Profile Image:</label>
+            <input type="file" id="image" name="image">
+
+            <button type="submit" class="btn edit-btn">Update Profile</button>
+            <button type="button" class="btn" onclick="toggleView()">Cancel</button>
+        </form>
+    </div>
+</body>
+</html>

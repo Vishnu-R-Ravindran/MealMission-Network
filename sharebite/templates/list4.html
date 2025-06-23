@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orphanage List</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #4b5e6b, #f1f8e9);
+            margin: 0;
+            padding: 0;
+        }
+
+        .btn {
+            border-radius: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <div class="flex flex-col items-center justify-center min-h-screen">
+        <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-6xl">
+            <h2 class="text-2xl font-bold mb-6 text-center">Donations List</h2>
+            <table class="min-w-full bg-white border border-gray-300">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="py-2 px-4 border-b text-left">ID</th>
+                        <th class="py-2 px-4 border-b text-left">Hotel_name</th>
+                        <th class="py-2 px-4 border-b text-left">Food_details</th>
+                        <th class="py-2 px-4 border-b text-left">Quantity</th>
+                        <th class="py-2 px-4 border-b text-left">proposed_pickup_time </th>
+                        <th class="py-2 px-4 border-b text-left"> proposed_location</th>
+                        <th class="py-2 px-4 border-b text-left">status</th>
+                        <th class="py-2 px-4 border-b text-left">added@</th>
+                        <th class="py-2 px-4 border-b text-left">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in user %}
+                    <tr class="hover:bg-gray-100">
+                        <td class="py-2 px-4 border-b">{{ user.id }}</td>
+                        <td class="py-2 px-4 border-b">{{ user.hotel }}</td>
+                        <td class="py-2 px-4 border-b">{{ user.food_details}}</td>
+                        <td class="py-2 px-4 border-b">{{ user.quantity }}</td>
+                        <td class="py-2 px-4 border-b">{{ user.proposed_pickup_time }}</td>
+                        <td class="py-2 px-4 border-b">{{ user.proposed_location }}</td>
+                        <td class="py-2 px-4 border-b">{{ user.status }}</td>
+                        <td class="py-2 px-4 border-b">{{ user.created_at  }}</td>
+                        <td class="py-2 px-4 border-b">
+                            <form method="POST" action="{% url 'listx1' user.id %}" style="display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn text-red-600 hover:text-red-800">Remove</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="py-2 px-4 text-center">No donations found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>

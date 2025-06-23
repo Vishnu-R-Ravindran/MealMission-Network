@@ -1,0 +1,264 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #FFDEAD, #87CEFA, #D3D3D3);
+            background-size: cover;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 60%;
+            margin: 50px auto;
+            background-color: rgba(255, 255, 255, 0.85);
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .profile-header img {
+            border-radius: 15px;
+            width: 200px;
+            height: 120px;
+            object-fit: cover;
+            margin-bottom: 20px;
+            border: 3px solid #f5a623;
+        }
+
+        .profile-header h2 {
+            margin: 0;
+            font-size: 2rem;
+            color: #333;
+        }
+
+        .profile-info {
+            margin-top: 20px;
+        }
+
+        .profile-info label {
+            font-weight: bold;
+            color: #444;
+        }
+
+        .profile-info p {
+            margin: 5px 0 15px 0;
+            color: #555;
+        }
+
+        .edit-button, .save-button, .cancel-button, .back-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #f5a623;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .edit-button:hover, .save-button:hover, .cancel-button:hover, .back-button:hover {
+            background-color: #fff;
+            color: #f5a623;
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .edit-form {
+            display: none;
+            margin-top: 30px;
+        }
+
+        .edit-form input[type="text"], 
+        .edit-form input[type="email"], 
+        .edit-form input[type="number"], 
+        .edit-form select {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 15px 0;
+            border: 1px solid #ccc;
+            border-radius: 15px;
+        }
+
+        .back-button {
+            margin-top: 30px;
+            background-color: #34495e;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            padding: 15px 25px;
+            border-radius: 50px;
+            display: block;
+            text-decoration: none;
+            width: 100%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .back-button:hover {
+            background-color: #2c3e50;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 0.9em;
+            display: none;
+            margin-top: -10px;
+            margin-bottom: 10px;
+        }
+
+        .invalid {
+            border-color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="profile-header">
+        <img src="{% if hotel.image %}{{ hotel.image.url }}{% else %}{% static 'default-profile.png' %}{% endif %}" alt="Hotel Profile Image">
+        <h2>{{ hotel.name }}</h2>
+    </div>
+    
+    <div class="profile-info">
+        <label>Email:</label>
+        <p>{{ hotel.email }}</p>
+        <label>Phone Number:</label>
+        <p>{{ hotel.phone_number }}</p>
+        <label>Location:</label>
+        <p>{{ hotel.location }}</p>
+        <label>Food Capacity:</label>
+        <p>{{ hotel.food_capacity }} meals</p>
+        <label>Food Type:</label>
+        <p>{{ hotel.get_food_type_display }}</p>
+    </div>
+
+    <button class="edit-button" onclick="showEditForm()">Edit Profile</button>
+
+    <div class="edit-form" id="editForm">
+        <form method="POST" enctype="multipart/form-data" action="{% url 'houpdate' %}" onsubmit="return validateForm()">
+            {% csrf_token %}
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" value="{{ hotel.name }}" required>
+            <span class="error-message" id="name-error">Name is required</span>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="{{ hotel.email }}" required>
+            <span class="error-message" id="email-error">Please enter a valid email</span>
+
+            <label for="phone_number">Phone Number:</label>
+            <input type="number" id="phone_number" name="phone_number" value="{{ hotel.phone_number }}" required min="1">
+            <span class="error-message" id="phone-error">Phone number must be 10 digits and positive</span>
+
+            <label for="location">Location:</label>
+            <input type="text" id="location" name="location" value="{{ hotel.location }}" required>
+            <span class="error-message" id="location-error">Please enter a valid location or coordinates</span>
+
+            <label for="food_capacity">Food Capacity:</label>
+            <input type="number" id="food_capacity" name="food_capacity" value="{{ hotel.food_capacity }}" required min="1">
+            <span class="error-message" id="capacity-error">Capacity must be a positive number</span>
+
+            <label for="food_type">Food Type:</label>
+            <select id="food_type" name="food_type">
+                <option value="VEG" {% if hotel.food_type == 'VEG' %}selected{% endif %}>Vegetarian</option>
+                <option value="NONVEG" {% if hotel.food_type == 'NONVEG' %}selected{% endif %}>Non-Vegetarian</option>
+                <option value="BOTH" {% if hotel.food_type == 'BOTH' %}selected{% endif %}>Both</option>
+            </select>
+
+            <label for="image">Profile Image:</label>
+            <input type="file" id="image" name="image">
+
+            <button type="submit" class="save-button">Save Changes</button>
+            <button type="button" class="cancel-button" onclick="hideEditForm()">Cancel</button>
+        </form>
+    </div>
+
+    <a href="{% url 'hotelhome' %}" class="back-button">Back to Home</a>
+</div>
+
+<script>
+    function showEditForm() {
+        document.getElementById('editForm').style.display = 'block';
+        document.querySelector('.edit-button').style.display = 'none';
+    }
+
+    function hideEditForm() {
+        document.getElementById('editForm').style.display = 'none';
+        document.querySelector('.edit-button').style.display = 'inline-block';
+    }
+
+    function validateForm() {
+        let isValid = true;
+        
+        // Reset error states
+        document.querySelectorAll('.error-message').forEach(error => error.style.display = 'none');
+        document.querySelectorAll('input').forEach(input => input.classList.remove('invalid'));
+
+        // Name validation
+        const name = document.getElementById('name').value;
+        if (!name.trim()) {
+            showError('name', 'name-error');
+            isValid = false;
+        }
+
+        // Email validation
+        const email = document.getElementById('email').value;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            showError('email', 'email-error');
+            isValid = false;
+        }
+
+        // Phone number validation
+        const phone = document.getElementById('phone_number').value;
+        const phoneRegex = /^[1-9]\d{9}$/;
+        if (!phoneRegex.test(phone)) {
+            showError('phone_number', 'phone-error');
+            isValid = false;
+        }
+
+        // Location validation (allows text or coordinates)
+        const location = document.getElementById('location').value;
+        const locationRegex = /^(?:[A-Za-z\s,]+|(?:-?\d+\.\d+,\s?-?\d+\.\d+))$/;
+        if (!locationRegex.test(location)) {
+            showError('location', 'location-error');
+            isValid = false;
+        }
+
+        // Food capacity validation
+        const capacity = parseInt(document.getElementById('food_capacity').value);
+        if (isNaN(capacity) || capacity <= 0) {
+            showError('food_capacity', 'capacity-error');
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    function showError(inputId, errorId) {
+        const input = document.getElementById(inputId);
+        const error = document.getElementById(errorId);
+        input.classList.add('invalid');
+        error.style.display = 'block';
+    }
+
+    // Real-time validation
+    ['name', 'email', 'phone_number', 'location', 'food_capacity'].forEach(id => {
+        document.getElementById(id).addEventListener('input', validateForm);
+    });
+</script>
+
+</body>
+</html>

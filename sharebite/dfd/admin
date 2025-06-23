@@ -1,0 +1,52 @@
+digraph Admin_Module {
+    /* Graph settings */
+    rankdir=TB;
+    node [fontsize=10];
+    
+    /* Title of the diagram */
+    labelloc="t";
+    label="Admin Module Data Flow Diagram";
+    
+    /* External Entity */
+    Admin [shape=box, label="Admin"];
+    
+    /* Processes */
+    Login [shape=circle, label="Login"];
+    ManageCoordinators [shape=circle, label="Manage\nCoordinators"];
+    ManageHotels [shape=circle, label="Manage\nHotels"];
+    ManageOrphanages [shape=circle, label="Manage\nOrphanages"];
+    ManageDonations [shape=circle, label="Manage\nDonations"];
+    ReviewFeedback [shape=circle, label="Review\nFeedback"];
+    
+    /* Data Stores */
+ CoordinatorDB [shape=record, label="|Coordinator "];
+HotelDB [shape=record, label="|Hotel "];
+OrphanageDB [shape=record, label="|Orphanage "];
+DonationDB [shape=record, label="|Donation "];
+FeedbackDB [shape=record, label="|Feedback "];
+    
+    /* Admin to Login Connection */
+    Admin -> Login [label="Credentials"];
+    
+    /* Login to Process Connections */
+    Login -> ManageCoordinators [label="Access"];
+    Login -> ManageHotels [label="Access"];
+    Login -> ManageOrphanages [label="Access"];
+    Login -> ManageDonations [label="Access"];
+    Login -> ReviewFeedback [label="Access"];
+    
+    /* Process to DataStore Connections */
+    ManageCoordinators -> CoordinatorDB [dir=both, label="Add/Update/Delete\nCoordinator Data"];
+    ManageHotels -> HotelDB [dir=both, label="Approve/Update\nHotel Status"];
+    ManageOrphanages -> OrphanageDB [dir=both, label="Add/Update\nOrphanage Data"];
+    ManageDonations -> DonationDB [dir=both, label="Approve/Assign\nDonations"];
+    ReviewFeedback -> FeedbackDB [dir=both, label="View/Respond"];
+    
+    /* Cross-Process Connections */
+    ManageDonations -> CoordinatorDB [dir=both, label="Assign\nCoordinators"];
+    ManageDonations -> OrphanageDB [dir=both, label="Assign\nOrphanages"];
+    
+    /* Graph Layout */
+    {rank=same; ManageCoordinators ManageHotels ManageOrphanages ManageDonations ReviewFeedback}
+    {rank=same; CoordinatorDB HotelDB OrphanageDB DonationDB FeedbackDB}
+}
