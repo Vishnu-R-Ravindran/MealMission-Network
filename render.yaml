@@ -3,7 +3,7 @@ services:
     name: second-serving
     env: python
     buildCommand: pip install -r require.txt
-    startCommand: gunicorn secondserving.wsgi
+     startCommand: gunicorn secondserving.wsgi
     envVars:
       - key: SECRET_KEY
         generateValue: true
