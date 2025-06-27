@@ -17,7 +17,7 @@
             </div>
             <div class="form-inner">
                 <!-- login starts -->
-                <form action="{% url 'login' %}" class="login" method="post">
+                <form  class="login" method="post">
                     {% csrf_token %}
                     {% if msg %}
                     <p>{{ msg }}</p>

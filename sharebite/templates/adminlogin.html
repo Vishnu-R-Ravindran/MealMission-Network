@@ -13,7 +13,7 @@
     <div class="form-container">
       <div class="form-inner">
         <!-- Login Form Starts -->
-        <form action="{% url 'adlogin' %}" class="login" method="post">
+        <form  class="login" method="post">
           {% csrf_token %}
 
           {% if msg %}

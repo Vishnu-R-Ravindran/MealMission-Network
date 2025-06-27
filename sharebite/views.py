@@ -47,18 +47,19 @@ def coordinatorreg(request):
 
 
 def coordinatorlogin(request):
-   if request.method=="POST":        
-      email=request.POST.get("email")
-      password=request.POST.get("password") 
-      try:
-         us=coordinator.objects.get(email=email,password=password)
-         semail=us.email
-         request.session["email"]=semail
-         return redirect("coordinatorhome")
-      except:
-         msg="invalid username"
-         return render(request,"coordinator.html",{"msg":msg})
-   return render(request,"coordinator.html")
+    if request.method == "POST":
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+        
+        try:
+            user = coordinator.objects.get(email=email)
+            if user.password == password:  
+                request.session["email"] = user.email
+                return redirect("coordinatorhome")
+        except coordinator.DoesNotExist:
+            pass
+            
+    return render(request, "coordinator.html")
 
 def coordinatorprofile(request):
    email=request.session['email']
@@ -258,7 +259,7 @@ def log_donation(request):
     # Fetch the currently logged-in hotel using session data
     hotel_email = request.session.get('email')
     if not hotel_email:
-        alert = "<script>alert('You must be logged in to log a donation.'); window.location.href='/login/';</script>"
+        alert = "<script>alert('You must be logged in to log a donation.'); window.location.href='/logout/';</script>"
         return HttpResponse(alert)
 
     hotel = get_object_or_404(Hotel, email=hotel_email)
@@ -300,7 +301,7 @@ def view_donationss(request):
     # Check if the hotel is logged in using the session email
     hotel_email = request.session.get('email')
     if not hotel_email:
-        alert = "<script>alert('You must be logged in to view donations.'); window.location.href='/login/';</script>"
+        alert = "<script>alert('You must be logged in to view donations.'); window.location.href='/logout/';</script>"
         return HttpResponse(alert)
 
     # Fetch the hotel using the email from the session
@@ -322,7 +323,7 @@ def delete_donation(request, id):
         # Assuming the logged-in user's email is stored in the session
         email = request.session.get('email')
         if not email:
-            alert = "<script>alert('You must be logged in to delete donations.'); window.location.href='/login/';</script>"
+            alert = "<script>alert('You must be logged in to delete donations.'); window.location.href='/logout/';</script>"
             return HttpResponse(alert)
 
         # Retrieve the donation using the id from the URL
@@ -556,7 +557,7 @@ def reject_donation(request, donation_id):
 
 def view_assigned_donations(request):
     if 'email' not in request.session:
-        alert = "<script>alert('You must be logged in as a coordinator.'); window.location.href='/login/';</script>"
+        alert = "<script>alert('You must be logged in as a coordinator.'); window.location.href='/logout/';</script>"
         return HttpResponse(alert)
 
     coordinator_email = request.session['email']
@@ -564,7 +565,7 @@ def view_assigned_donations(request):
     try:
         coordinators = coordinator.objects.get(email=coordinator_email)
     except coordinator.DoesNotExist:
-        alert = "<script>alert('Coordinator not found.'); window.location.href='/login/';</script>"
+        alert = "<script>alert('Coordinator not found.'); window.location.href='/logout/';</script>"
         return HttpResponse(alert)
 
     # Fetch donations assigned to this coordinator and status 'APPROVED'
@@ -581,14 +582,14 @@ def view_assigned_donations(request):
 
 def mark_as_collected(request, donation_id):
     if 'email' not in request.session:
-        alert = "<script>alert('You must be logged in as a coordinator.'); window.location.href='/login/';</script>"
+        alert = "<script>alert('You must be logged in as a coordinator.'); window.location.href='/logout/';</script>"
         return HttpResponse(alert)
 
     coordinator_email = request.session['email']
     try:
         coordinators = coordinator.objects.get(email=coordinator_email)
     except coordinator.DoesNotExist:
-        alert = "<script>alert('Coordinator not found.'); window.location.href='/login/';</script>"
+        alert = "<script>alert('Coordinator not found.'); window.location.href='/logout/';</script>"
         return HttpResponse(alert)
 
     # Fetch the donation assigned to this coordinator
@@ -608,14 +609,14 @@ def mark_as_collected(request, donation_id):
 
 def reject(request, donation_id):
     if 'email' not in request.session:
-        alert = "<script>alert('You must be logged in as a coordinator.'); window.location.href='/login/';</script>"
+        alert = "<script>alert('You must be logged in as a coordinator.'); window.location.href='/logout/';</script>"
         return HttpResponse(alert)
 
     coordinator_email = request.session['email']
     try:
         coordinators = coordinator.objects.get(email=coordinator_email)
     except coordinator.DoesNotExist:
-        alert = "<script>alert('Coordinator not found.'); window.location.href='/login/';</script>"
+        alert = "<script>alert('Coordinator not found.'); window.location.href='/logout/';</script>"
         return HttpResponse(alert)
 
     # Fetch the donation assigned to this coordinator
@@ -645,7 +646,7 @@ def reject(request, donation_id):
 
 def view_collected_donations(request):
     if 'email' not in request.session:
-        alert = "<script>alert('You must be logged in as an orphanage.'); window.location.href='/login/';</script>"
+        alert = "<script>alert('You must be logged in as an orphanage.'); window.location.href='/logout/';</script>"
         return HttpResponse(alert)
 
     orphanage_email = request.session['email']
@@ -653,7 +654,7 @@ def view_collected_donations(request):
     try:
         orphanage = Orphanage.objects.get(email=orphanage_email)
     except Orphanage.DoesNotExist:
-        alert = "<script>alert('Orphanage not found.'); window.location.href='/login/';</script>"
+        alert = "<script>alert('Orphanage not found.'); window.location.href='/logout/';</script>"
         return HttpResponse(alert)
 
     # Fetch donations assigned to this orphanage with status 'COLLECTED'
@@ -669,7 +670,7 @@ def view_collected_donations(request):
 
 def mark_as_received(request, donation_id):
     if 'email' not in request.session:
-        alert = "<script>alert('You must be logged in as an orphanage.'); window.location.href='/login/';</script>"
+        alert = "<script>alert('You must be logged in as an orphanage.'); window.location.href='/logout/';</script>"
         return HttpResponse(alert)
 
     orphanage_email = request.session['email']
@@ -677,7 +678,7 @@ def mark_as_received(request, donation_id):
     try:
         orphanage = Orphanage.objects.get(email=orphanage_email)
     except Orphanage.DoesNotExist:
-        alert = "<script>alert('Orphanage not found.'); window.location.href='/login/';</script>"
+        alert = "<script>alert('Orphanage not found.'); window.location.href='/logout/';</script>"
         return HttpResponse(alert)
 
     # Fetch the donation assigned to this orphanage
@@ -743,14 +744,14 @@ def delete_d(request, id):
 def view_coordinator_donations(request):
     # Check if the coordinator is logged in via session
     if 'email' not in request.session:
-        alert = "<script>alert('You must be logged in as a coordinator to view your donations.'); window.location.href='/login/';</script>"
+        alert = "<script>alert('You must be logged in as a coordinator to view your donations.'); window.location.href='/logout/';</script>"
         return HttpResponse(alert)
 
     email = request.session['email']
     try:
         coordinators = coordinator.objects.get(email=email)
     except coordinators.DoesNotExist:
-        alert = "<script>alert('Invalid coordinator account. Please log in again.'); window.location.href='/login/';</script>"
+        alert = "<script>alert('Invalid coordinator account. Please log in again.'); window.location.href='/logout/';</script>"
         return HttpResponse(alert)
 
     # Fetch donations where the coordinator is assigned and status is either 'COLLECTED' or 'RECEIVED'
