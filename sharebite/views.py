@@ -156,11 +156,10 @@ def hotellogin(request):
          us=Hotel.objects.get(email=email,password=password)
          semail=us.email
          request.session["email"]=semail
-         return redirect("hotelhome")
+         return redirect('hotelhome')
       except:
-         msg="invalid username"
-         return render(request,"n.html",{"msg":msg})
-   return render(request,"n.html")
+         return render(request,"hotel.html")
+   return render(request,"hotel.html")
 
 
 

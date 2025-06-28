@@ -21,7 +21,7 @@
       </div>
       <div class="form-inner">
         <!-- login form starts -->
-        <form  class="login" method="post">
+        <form action="{% url 'hotellogin' %} "class="login" method="post">
           {% csrf_token %}
           {% if msg %}
             <p>{{ msg }}</p>
